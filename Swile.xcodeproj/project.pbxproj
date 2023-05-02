@@ -30,6 +30,9 @@
 		D2710F592A00096B009F38CC /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2710F582A00096B009F38CC /* ImageLoader.swift */; };
 		D2710F5B2A000A08009F38CC /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2710F5A2A000A08009F38CC /* DataLoader.swift */; };
 		D2710F5E2A00434A009F38CC /* AppPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2710F5D2A00434A009F38CC /* AppPreferences.swift */; };
+		D29A41432A0097EE0015B69B /* CoreNetworkingAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D24FD7C229FEAF7900CAEBCC /* CoreNetworkingAPI.framework */; };
+		D29A41442A0097EE0015B69B /* CoreNetworkingAPI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D24FD7C229FEAF7900CAEBCC /* CoreNetworkingAPI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D29A41482A0097FE0015B69B /* Transaction+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29A41402A0095DA0015B69B /* Transaction+UI.swift */; };
 		D2AB650429FF1DE200E459CA /* CoreNetworkingAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D24FD7C229FEAF7900CAEBCC /* CoreNetworkingAPI.framework */; };
 		D2AB650529FF1DE200E459CA /* CoreNetworkingAPI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D24FD7C229FEAF7900CAEBCC /* CoreNetworkingAPI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D2AB650829FF1E0800E459CA /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24FD7E529FEB25F00CAEBCC /* DependencyContainer.swift */; };
@@ -138,6 +141,13 @@
 			remoteGlobalIDString = D24FD8EA29FEEE0B00CAEBCC;
 			remoteInfo = Components;
 		};
+		D29A41452A0097EE0015B69B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D2FA7EE829FE8D3C00036894 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D24FD7C129FEAF7900CAEBCC;
+			remoteInfo = CoreNetworkingAPI;
+		};
 		D2AB650629FF1DE300E459CA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D2FA7EE829FE8D3C00036894 /* Project object */;
@@ -225,6 +235,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		D29A41472A0097EE0015B69B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				D29A41442A0097EE0015B69B /* CoreNetworkingAPI.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D2FA7F3D29FE939600036894 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -277,6 +298,7 @@
 		D2710F582A00096B009F38CC /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		D2710F5A2A000A08009F38CC /* DataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
 		D2710F5D2A00434A009F38CC /* AppPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPreferences.swift; sourceTree = "<group>"; };
+		D29A41402A0095DA0015B69B /* Transaction+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Transaction+UI.swift"; path = "../Resources/Transaction+UI.swift"; sourceTree = "<group>"; };
 		D2AB64FD29FF14A000E459CA /* CodableLoaderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableLoaderProtocol.swift; sourceTree = "<group>"; };
 		D2AB650229FF1DA000E459CA /* RequestInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestInput.swift; sourceTree = "<group>"; };
 		D2AB651029FF219C00E459CA /* CodableLoaderWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableLoaderWrapper.swift; sourceTree = "<group>"; };
@@ -340,6 +362,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D29A41432A0097EE0015B69B /* CoreNetworkingAPI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -615,6 +638,7 @@
 		D2AB653029FF5B3100E459CA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				D29A41402A0095DA0015B69B /* Transaction+UI.swift */,
 				D2AB653129FF5B4600E459CA /* DateFormatter.swift */,
 				D2AB653829FF5BAE00E459CA /* Transaction.swift */,
 			);
@@ -923,10 +947,12 @@
 				D24FD79929FEAE6C00CAEBCC /* Sources */,
 				D24FD79A29FEAE6C00CAEBCC /* Frameworks */,
 				D24FD79B29FEAE6C00CAEBCC /* Resources */,
+				D29A41472A0097EE0015B69B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				D29A41462A0097EE0015B69B /* PBXTargetDependency */,
 			);
 			name = CoreNetworking;
 			productName = CoreNetworking;
@@ -1410,6 +1436,7 @@
 				D2FA7F4329FE93BE00036894 /* TransactionsListView.swift in Sources */,
 				D24FD7ED29FEC07100CAEBCC /* TransactionsService.swift in Sources */,
 				D2FA7F2729FE939600036894 /* Transactions.docc in Sources */,
+				D29A41482A0097FE0015B69B /* Transaction+UI.swift in Sources */,
 				D2AB651E29FF246C00E459CA /* Endpoints.swift in Sources */,
 				D2AB654729FFED4A00E459CA /* TransactionItemImageView.swift in Sources */,
 				D2AB653729FF5B7A00E459CA /* TransactionSection.swift in Sources */,
@@ -1488,6 +1515,11 @@
 			isa = PBXTargetDependency;
 			target = D24FD8EA29FEEE0B00CAEBCC /* Components */;
 			targetProxy = D24FD8FD29FEEF5500CAEBCC /* PBXContainerItemProxy */;
+		};
+		D29A41462A0097EE0015B69B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D24FD7C129FEAF7900CAEBCC /* CoreNetworkingAPI */;
+			targetProxy = D29A41452A0097EE0015B69B /* PBXContainerItemProxy */;
 		};
 		D2AB650729FF1DE300E459CA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1899,6 +1931,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "Features/Transactions/Transactions/Assets.xcassets App/Swile/Preview\\ Content";
+				DEVELOPMENT_TEAM = RX8MR67H9E;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -1936,6 +1969,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "Features/Transactions/Transactions/Assets.xcassets App/Swile/Preview\\ Content";
+				DEVELOPMENT_TEAM = RX8MR67H9E;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;

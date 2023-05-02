@@ -31,8 +31,7 @@ class ImageLoader: ObservableObject {
         cancellable = DataLoader(url: url)
             .load()
             .receive(on: DispatchQueue.main)
-            .sink { completion in
-                print(completion)
+            .sink { _ in
             } receiveValue: { data in
                 self.image = UIImage(data: data)
             }

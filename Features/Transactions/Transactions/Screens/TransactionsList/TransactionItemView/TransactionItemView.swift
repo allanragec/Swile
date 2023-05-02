@@ -11,14 +11,24 @@ import TransactionsAPI
 
 struct TransactionItemView: View {
     @ObservedObject var viewModel: TransactionItemViewModel
+    @Binding var detailTransaction: TransactionsAPI.Transaction?
+    let namespace: Namespace.ID
     
-    init(_ transaction: TransactionsAPI.Transaction) {
+    init(
+        _ transaction: TransactionsAPI.Transaction,
+        detailTransaction: Binding<TransactionsAPI.Transaction?> = Binding.constant(nil),
+        namespace: Namespace.ID
+    ) {
         self.viewModel = .init(transaction)
+        self._detailTransaction = detailTransaction
+        self.namespace = namespace
     }
     
-    var body: some View {
-        HStack {
-            TransactionItemImageView(viewModel.transaction)
+    fileprivate func compactView() -> some View {
+        return ZStack(alignment: .bottomLeading) {
+            if detailTransaction == nil {
+                TransactionItemImageView(viewModel.transaction, namespace: namespace)
+            }
             
             VStack(alignment: .leading, spacing: 2) {
                 HStack {
@@ -50,11 +60,19 @@ struct TransactionItemView: View {
                     .foregroundColor(Color(hex: 0x918BA6))
                     .frame(alignment: .leading)
             }
+            .padding(.leading, 76)
+            .frame(height: 66)
         }
+    }
+    
+    var body: some View {
+        compactView()
     }
 }
 
 struct TransactionItemView_Previews: PreviewProvider {
+    @Namespace static var namespace
+    
     static var previews: some View {
         TransactionItemView(.init(
             name: "Sushi",
@@ -67,7 +85,7 @@ struct TransactionItemView_Previews: PreviewProvider {
                             symbol: "€",
                             title: "Euro")),
             smallIcon: .init(url: nil, category: .mealVoucher),
-            largeIcon: .init(url: nil, category: .mealVoucher))
-        )
+            largeIcon: .init(url: nil, category: .mealVoucher)),
+                            namespace: namespace)
     }
 }

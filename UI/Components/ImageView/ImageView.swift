@@ -24,6 +24,7 @@ public struct ImageView: View {
                 ProgressView()
                     .frame(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
             }
-        }.aspectRatio(contentMode: .fit)
+        }
+        .aspectRatio(contentMode: .fit)
     }
 }

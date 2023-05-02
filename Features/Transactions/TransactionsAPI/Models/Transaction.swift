@@ -49,4 +49,8 @@ public struct Transaction: Decodable, Hashable, Identifiable {
         hasher.combine(type)
         hasher.combine(date)
     }
+    
+    public enum CodingKeys: String, CodingKey {
+        case name, type, date, message, amount, smallIcon, largeIcon
+    }
 }
