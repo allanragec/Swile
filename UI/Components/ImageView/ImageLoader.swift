@@ -1,39 +1,48 @@
 //
-//  ImageLoader.swift
+//  DataLoader.swift
 //  Components
 //
 //  Created by Allan Melo on 01/05/23.
 //
 
-import SwiftUI
 import Combine
+import UIKit
 
-class ImageLoader: ObservableObject {
-    @Published var image: UIImage?
+public struct ImageLoader {
+    var urlSession = URLSession.shared
+    private var urlString: String
     
-    private var cancellable: AnyCancellable?
-    private var url: String
-    
-    init(urlString: String, autoLoad: Bool = true) {
-        self.url = urlString
-        
-        if autoLoad {
-            load()
-        }
+    public init(urlString: String?) {
+        self.urlString = urlString ?? ""
     }
     
-    func load() {
-        guard let url = URL(string: self.url) else {
+    private let cache = ImageCache.shared
+    
+    public func load() -> AnyPublisher<UIImage?, Never> {
+        guard let url = URL(string: self.urlString) else {
             print("ImageLoader: malformed URL")
-            return
+            return Just(nil)
+                .eraseToAnyPublisher()
         }
         
-        cancellable = DataLoader(url: url)
-            .load()
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-            } receiveValue: { data in
-                self.image = UIImage(data: data)
+        if let image = cache[url.absoluteString] {
+            return Just(image)
+                .eraseToAnyPublisher()
+        }
+        
+        return urlSession.dataTaskPublisher(for: url)
+            .map { (data, response) -> UIImage? in return UIImage(data: data) }
+            .catch {
+                error -> AnyPublisher<UIImage?, Never> in
+                print("error to get image \(error) | url : \(url)")
+                return Just(nil)
+                    .eraseToAnyPublisher()
             }
+            .handleEvents(receiveOutput: { image in
+                guard let image = image else { return }
+                self.cache[url.absoluteString] = image
+            })
+            .subscribe(on: DispatchQueue.global())
+            .eraseToAnyPublisher()
     }
 }

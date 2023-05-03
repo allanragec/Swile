@@ -15,6 +15,7 @@ struct SwileApp: App {
     var body: some Scene {
         WindowGroup {
             TransactionsListView()
+                .environmentObject(DetailsScreenStepStateManager())
         }
     }
 }

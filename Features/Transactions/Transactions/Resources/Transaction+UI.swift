@@ -39,7 +39,7 @@ extension TransactionsAPI.Transaction {
         case .burger, .bakery, .supermarket:
             return Color(hex: 0xFFEBD4)
         case .payment, .donation, .gift:
-            return .white
+            return Color(hex: 0x000000, alpha: 0.06)
         }
     }
     

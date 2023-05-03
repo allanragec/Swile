@@ -10,7 +10,7 @@ import SwiftUI
 import TransactionsAPI
 
 struct TransactionItemView: View {
-    @ObservedObject var viewModel: TransactionItemViewModel
+    @StateObject var viewModel: TransactionItemViewModel
     @Binding var detailTransaction: TransactionsAPI.Transaction?
     let namespace: Namespace.ID
     
@@ -19,12 +19,13 @@ struct TransactionItemView: View {
         detailTransaction: Binding<TransactionsAPI.Transaction?> = Binding.constant(nil),
         namespace: Namespace.ID
     ) {
-        self.viewModel = .init(transaction)
+        let viewModel = TransactionItemViewModel(transaction)
+        _viewModel = StateObject(wrappedValue: viewModel)
         self._detailTransaction = detailTransaction
         self.namespace = namespace
     }
     
-    fileprivate func compactView() -> some View {
+    fileprivate func transactionCell() -> some View {
         return ZStack(alignment: .bottomLeading) {
             if detailTransaction == nil {
                 TransactionItemImageView(viewModel.transaction, namespace: namespace)
@@ -66,7 +67,9 @@ struct TransactionItemView: View {
     }
     
     var body: some View {
-        compactView()
+        transactionCell()
+            .background(.white)
+            .padding([.leading, .trailing], 20)
     }
 }
 

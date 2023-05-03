@@ -39,6 +39,9 @@ class TransactionsService: TransactionsServicing {
     func getTransactionsAsync() async throws -> TransansactionsResult {
         try await dependencies
             .codableLoader
-            .getAsync(requestInput)
+            .getAsync(RequestInput(
+                endpoint: Endpoints.getTransactions.rawValue,
+                urlSession: .init(configuration: .ephemeral)
+            ))
     }
 }

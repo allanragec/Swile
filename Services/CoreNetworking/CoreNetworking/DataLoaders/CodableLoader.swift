@@ -59,13 +59,17 @@ public struct CodableLoader<Model: Decodable> {
     }
     
     public func getAsync() async throws -> Model {
-        let (data, _) = try await dataLoader.createAsyncRequest(
-            httpMethod: RequestInput.Method.get.rawValue
-        )
-        
-        return try decoder.decode(Model.self, from: data)
+        let task = Task { () -> Model in
+            let (data, _) = try await dataLoader.createAsyncRequest(
+                httpMethod: RequestInput.Method.get.rawValue
+            )
+            
+            return try decoder.decode(Model.self, from: data)
+            
+        }
+
+        return try await task.value
     }
-    
     
     func createRequest<Payload: Encodable>(
         _ model: Payload,

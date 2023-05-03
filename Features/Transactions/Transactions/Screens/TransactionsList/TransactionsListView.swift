@@ -11,8 +11,10 @@ import TransactionsAPI
 
 public struct TransactionsListView: View {
     @Namespace var namespace
-    @ObservedObject var viewModel = TransactionsListViewModel()
+    @StateObject var viewModel = TransactionsListViewModel()
     @State var detailTransaction: TransactionsAPI.Transaction?
+    @EnvironmentObject private var screenState: DetailsScreenStepStateManager
+    @State var canStartNewAnimation: Bool = true
     
     public init() {
         self.detailTransaction = nil
@@ -26,7 +28,8 @@ public struct TransactionsListView: View {
                                     namespace: namespace
                 )
                 .onTapGesture {
-                    withAnimation(.spring(response: 0.8, dampingFraction: 1)) {
+                    guard self.canStartNewAnimation  else { return }
+                    withAnimation(.spring(response: 0.6, dampingFraction: 1)) {
                         self.detailTransaction = transaction
                     }
                 }
@@ -34,9 +37,6 @@ public struct TransactionsListView: View {
             }
         }
         .frame(alignment: .leading)
-        .textCase(nil)
-        .listRowInsets(EdgeInsets())
-        .listRowSeparator(.hidden)
     }
     
     fileprivate func listView() -> some View {
@@ -50,7 +50,6 @@ public struct TransactionsListView: View {
                         section(transactionSection)
                     }
                 }
-                .scrollContentBackground(.hidden)
                 .refreshable {
                     await viewModel.getTransactionsAsync()
                 }
@@ -69,6 +68,7 @@ public struct TransactionsListView: View {
                 TransactionDetailsView(
                     transaction,
                     detailTransaction: $detailTransaction,
+                    canStartNewAnimation: $canStartNewAnimation,
                     namespace: namespace
                 )
             }

@@ -10,28 +10,25 @@ import SwiftUI
 import TransactionsAPI
 
 struct TransactionItemImageView: View {
-    @ObservedObject var viewModel: TransactionItemImageViewModel
+    @StateObject var viewModel: TransactionItemImageViewModel
     let namespace: Namespace.ID
     
     init(_ transaction: TransactionsAPI.Transaction, namespace: Namespace.ID) {
-        self.viewModel = .init(transaction)
+        let viewModel = TransactionItemImageViewModel(transaction)
+        _viewModel = StateObject(wrappedValue: viewModel)
         self.namespace = namespace
     }
     
     var smallIconView: some View {
         Group {
-            Group {
-                if let url = viewModel.smallIconURL {
-                    ImageView(withURL: url)
-                        .frame(width: 16, height: 16)
-                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-                }
-                else {
-                    Image(viewModel.smallIconName)
-                }
+            if let image = viewModel.smallImage {
+                Image(uiImage: image)
+                    .resizable()
+                    .frame(width: 16, height: 16)
+                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
             }
-            .frame(width: 22, height: 22)
         }
+        .frame(width: 22, height: 22)
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 11, style: .continuous))
         .matchedGeometryEffect(id: "\(viewModel.transaction.name)-smallIconView", in: namespace)
@@ -40,22 +37,21 @@ struct TransactionItemImageView: View {
     
     var largeIconView: some View {
         Group {
-            Group {
-                if let url = viewModel.largeIconURL {
-                    ImageView(withURL: url)
-                        .matchedGeometryEffect(id: "\(viewModel.transaction.name)-ImageView", in: namespace)
-                        .clipShape(
-                            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                        )
+            if let image = viewModel.largeImage {
+                if viewModel.isLargeImageResized {
+                    Image(uiImage: image)
+                        .resizable()
                 }
                 else {
-                    Image(viewModel.largeIconName)
+                    Image(uiImage: image)
                         .frame(width: 24, height: 24, alignment: .center)
-                        .matchedGeometryEffect(id: "\(viewModel.transaction.name)-image", in: namespace)
                 }
             }
         }
         .frame(width: 56, height: 56)
+        .clipShape(
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+        )
         .overlay(
             RoundedRectangle(cornerRadius: 20)
                 .stroke(viewModel.largeIconBorderColor, lineWidth: 1)
@@ -66,6 +62,7 @@ struct TransactionItemImageView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                 .matchedGeometryEffect(id: "\(viewModel.transaction.name)-background", in: namespace)
         )
+        .matchedGeometryEffect(id: "\(viewModel.transaction.name)-image", in: namespace)
         
     }
     

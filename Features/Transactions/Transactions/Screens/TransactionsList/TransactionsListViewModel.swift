@@ -31,7 +31,8 @@ class TransactionsListViewModel: ObservableObject {
                 self.createSections(result.transactions)
             }
         }
-        catch {
+        catch let error {
+            print("Could not get refresh transactions: \(error)")
             DispatchQueue.main.async {
                 self.toast = Toast(
                     type: .error,
