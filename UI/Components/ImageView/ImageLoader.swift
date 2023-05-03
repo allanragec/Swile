@@ -12,8 +12,8 @@ public struct ImageLoader {
     var urlSession = URLSession.shared
     private var urlString: String
     
-    public init(urlString: String?) {
-        self.urlString = urlString ?? ""
+    public init(urlString: String) {
+        self.urlString = urlString
     }
     
     private let cache = ImageCache.shared

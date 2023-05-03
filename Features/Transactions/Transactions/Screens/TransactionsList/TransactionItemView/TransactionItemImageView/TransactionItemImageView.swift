@@ -63,7 +63,6 @@ struct TransactionItemImageView: View {
                 .matchedGeometryEffect(id: "\(viewModel.transaction.name)-background", in: namespace)
         )
         .matchedGeometryEffect(id: "\(viewModel.transaction.name)-image", in: namespace)
-        
     }
     
     var body: some View {

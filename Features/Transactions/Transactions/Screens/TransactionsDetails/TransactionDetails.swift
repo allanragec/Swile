@@ -76,7 +76,6 @@ struct TransactionDetailsView: View {
     
     fileprivate func largeIcon() -> some View {
         return Group {
-            
             if let image = viewModel.largeImage {
                 if viewModel.isLargeImageResized {
                     Image(uiImage: image)
@@ -156,31 +155,121 @@ struct TransactionDetailsView: View {
         }
     }
     
-    var optionsView: some View {
-        VStack {
-            if secondAnimation {
-                HStack {
-                    Image("icon_small_meal_voucher")
+    struct OptionItem: Identifiable {
+        var id: Int { title.hashValue }
+        let image: String
+        let backgroundColor: Color
+        let borderColor: Color
+        let title: String
+        let hasChangeAccount: Bool
+        
+        public init(
+            image: String,
+            backgroundColor: Color = Color(hex: 0xF6F6F8),
+            borderColor: Color = Color(hex: 0xEEEDF1),
+            title: String,
+            hasChangeAccount: Bool = false
+        ) {
+            self.image = image
+            self.backgroundColor = backgroundColor
+            self.borderColor = borderColor
+            self.title = title
+            self.hasChangeAccount = hasChangeAccount
+        }
+    }
+    var options: [OptionItem] = [
+        .init(
+            image: "icon_medium_meal_voucher",
+            backgroundColor: Color(hex: 0xFFEBD4),
+            borderColor: Color(hex: 0xFD9B28, alpha: 0.06),
+            title: "Titres-resto",
+            hasChangeAccount: true
+        ),
+        .init(image: "icon_medium_share",
+              title: "Partage d’addition"
+             ),
+        .init(
+            image: "icon_medium_heart",
+            title: "Aimer"
+        ),
+        .init(
+            image: "icon_medium_help",
+            title: "Signaler un problème"
+        )
+    ]
+    
+    func iconView(_ option: OptionItem) -> some View {
+        Group {
+                Image(option.image)
+                        .frame(width: 20, height: 20, alignment: .center)
+        }
+        .frame(width: 32, height: 32)
+        .clipShape(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(option.borderColor, lineWidth: 1)
+//                .matchedGeometryEffect(id: "\(viewModel.transaction.name)-RoundedRectangle", in: namespace)
+        )
+        .background(
+            option.backgroundColor
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+//                .matchedGeometryEffect(id: "\(viewModel.transaction.name)-background", in: namespace)
+        )
+//        .matchedGeometryEffect(id: "\(viewModel.transaction.name)-image", in: namespace)
+    }
+    
+    var optionsListView: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(0..<options.count, id: \.self) { index in
+                HStack(spacing: 0) {
+                    iconView(options[index])
                     
-                    Text("Titres-resto")
+                    Text(options[index].title)
                         .font(.custom("Segma-Medium", size: 15))
                         .foregroundColor(Color(hex: 0x1D1148))
+                        .padding(.leading, 12)
+                    
+                    Spacer()
+                    
+                    if options[index].hasChangeAccount {
+                        Text("Changer \nde compte")
+                            .frame(alignment: .trailing)
+                            .font(.custom("Segma-SemiBold", size: 12))
+                            .foregroundColor(Color(hex: 0x633FD3))
+                            .multilineTextAlignment(.trailing)
+                    }
                 }
-                .padding(.top, 24)
-                .opacity(1)
-                .matchedGeometryEffect(id: "option1", in: namespace)
+                .frame(height: 56)
+                if index != (options.count - 1) {
+                    Divider()
+                }
+            }
+        }
+    }
+    
+    var optionsView: some View {
+        Group {
+            if secondAnimation {
+                optionsListView
+                    .padding(.top, 24)
+                    .opacity(1)
+                    .matchedGeometryEffect(id: "optionsView", in: namespace)
             }
             else {
-                HStack {
-                    Image("icon_small_meal_voucher")
-                    
-                    Text("Titres-resto")
-                        .font(.custom("Segma-Medium", size: 15))
-                        .foregroundColor(Color(hex: 0x1D1148))
+                if dismissed {
+                    optionsListView
+                        .padding(.top, 24)
+                        .opacity(0)
+                        .matchedGeometryEffect(id: "optionsView", in: namespace)
                 }
-                .padding(.top, 100)
-                .opacity(0)
-                .matchedGeometryEffect(id: "option1", in: namespace)
+                else {
+                    optionsListView
+                        .padding(.top, 100)
+                        .opacity(0)
+                        .matchedGeometryEffect(id: "optionsView", in: namespace)
+                }
             }
         }
     }
@@ -194,21 +283,46 @@ struct TransactionDetailsView: View {
                     .frame(alignment: .bottomTrailing)
                     .padding([.trailing], 12)
                     .padding([.bottom], -11)
+                
+                ZStack {
+                    if firstAnimation {
+                        Image("icon_close")
+                            .frame(width: 24, height: 24, alignment: .topLeading)
+                            .padding([.leading], 20)
+                            .padding([.top], 53)
+                            .onTapGesture {
+                                self.dismissed = true
+                            }
+                            .opacity(dismissed ? 0 : 1)
+                            .matchedGeometryEffect(id: "icon_close", in: namespace)
+                    }
+                    else {
+                        Image("icon_close")
+                            .frame(width: 24, height: 24, alignment: .topLeading)
+                            .padding([.leading], 20)
+                            .padding([.top], 53)
+                            .onTapGesture {
+                                self.dismissed = true
+                            }
+                            .opacity(0)
+                            .matchedGeometryEffect(id: "icon_close", in: namespace)
+                    }
+                  
+                }
+                .frame(width: UIScreen.main.bounds.width, height: 224, alignment: .topLeading)
+                
             }
             
             detailsHeaderView
             
             optionsView
-                .background(.red)
+                .padding([.leading, .trailing], 20)
             
             Spacer()
         }
         .frame(height: UIScreen.main.bounds.height)
         .background(.white)
         .edgesIgnoringSafeArea(.all)
-        .onTapGesture {
-            self.dismissed = true
-        }
     }
     
     var body: some View {
@@ -227,7 +341,6 @@ struct TransactionDetailsView: View {
             switch screenState.state {
             case .firstStep:
                 guard self.detailTransaction != nil else { return }
-                print("dismiss firstStep going to detail nil")
                 animationTimer.upstream.connect().cancel()
                 withAnimation(.spring(response: 0.4, dampingFraction: 1)) {
                     self.detailTransaction = nil
@@ -237,13 +350,11 @@ struct TransactionDetailsView: View {
                     }
                 }
             case .secondStep:
-                print("dismiss secondStep going to first")
                 withAnimation(.easeIn(duration: 0.4)) {
                     self.firstAnimation = false
                     screenState.state = .firstStep
                 }
             case .finished:
-                print("dismiss finished, going to second")
                 withAnimation(.easeIn(duration: 0.6)) {
                     self.secondAnimation = false
                     screenState.state = .secondStep
@@ -254,13 +365,11 @@ struct TransactionDetailsView: View {
         else {
             switch screenState.state {
             case .firstStep:
-                print("start firstStep ")
                 withAnimation(.spring(response: 0.6)) {
                     firstAnimation = true
                     screenState.state = .secondStep
                 }
             case .secondStep:
-                print("start secondStep")
                 if secondAnimation == false {
                     withAnimation(.easeInOut(duration: 0.6)) {
                         self.secondAnimation = true
@@ -268,12 +377,9 @@ struct TransactionDetailsView: View {
                     }
                 }
             case .finished:
-                //                print("start finished")
-                // use this case to finish any work needed
                 break
             }
         }
-        
     }
 }
 

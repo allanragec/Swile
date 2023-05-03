@@ -21,7 +21,16 @@ public struct TransactionsListView: View {
     }
     
     fileprivate func section(_ section: TransactionSection) -> some View {
-        return Section(header: Text(section.month).padding([.leading], 4)) {
+        return Section(
+            header:  HStack {
+                Text(section.month)
+                    .padding(.leading, 25)
+                    .font(.custom("Segma-Medium", size: 13))
+                    .foregroundColor(Color(hex: 0x918BA6))
+                    .frame(alignment: .leading)
+                Spacer()
+            }
+        ) {
             ForEach(section.transactions) { transaction in
                 TransactionItemView(transaction,
                                     detailTransaction: self.$detailTransaction,
