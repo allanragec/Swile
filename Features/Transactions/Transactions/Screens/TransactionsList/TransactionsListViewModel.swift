@@ -43,7 +43,7 @@ class TransactionsListViewModel: ObservableObject {
         }
     }
     
-    private func getTransactions() {
+    func getTransactions() {
         isLoading = true
         service.getTransactions { result in
             switch result {

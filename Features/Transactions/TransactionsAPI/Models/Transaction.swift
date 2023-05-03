@@ -9,6 +9,10 @@ import Foundation
 
 public struct TransansactionsResult: Decodable {
     public let transactions: [Transaction]
+    
+    public init(transactions: [Transaction]) {
+        self.transactions = transactions
+    }
 }
 
 public struct Transaction: Decodable, Hashable, Identifiable {
